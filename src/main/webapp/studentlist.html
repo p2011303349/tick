@@ -1,76 +1,169 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>滴答办公系统-学员列表</title>
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="media/layui/css/layui.css" media="all">
-<script src="media/js/jquery.min.js"></script>
+	<meta charset="utf-8">
+	<title>滴答办公系统-学员列表</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+	<script src="media/js/jquery.min.js"></script>
 </head>
 <body>
-	<div class="layui-container">
-		<table id="tbdata" lay-filter="tbop"></table>
-		<script type="text/html" id="barop">
-			<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="detail">查看详情</a>
-    		<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
-    		
-		</script>
-	</div>
-	<script src="media/layui/layui.js"></script>
-	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-	<script>
-	layui.use('table', function(){
-		  var table = layui.table;
-		  
-		  //第一个实例
-		  table.render({
-		    elem: '#tbdata'
-		    ,url: 'studentpage.do' //数据接口
-		    ,page: true //开启分页
-		    ,cols: [[ //表头
-		      {field: 'no', title: '学号', sort: true, fixed: 'left'}
-		      ,{field: 'name', title: '学员名称'}
-		      ,{field: 'gname', title: '所在班级'}
-		      ,{field: 'sex', title: '性别'}
-		      ,{field: 'phone', title: '手机号'}
-		      ,{field: 'email', title: '邮箱'}
-		      ,{field: 'school', title: '毕业学校'}
-		      ,{field: 'education', title: '学历'}
-		      ,{field: 'birthday', title: '出生日期'}
-		      ,{field: 'createdate', title: '入学日期'}
-		      ,{field:'right', title: '操作',toolbar:"#barop"}
-		    ]]
-		  });
-		  //监听工具条
-		  table.on('tool(tbop)', function(obj){
-		        var data = obj.data;
-		        if(obj.event === 'del'){
-		            layer.confirm('是否确认删除学员?', function(index){
-		                $.ajax({
-		                    url: "studentdelete.do",
-		                    type: "POST",
-		                    data:"no="+data.no,
-		                    success: function(data){
-		                        if(data.code==1000){
-		                            obj.del();//删除表格中的对应行数据
-		                            layer.close(index);
-		                            layer.msg("删除成功", {icon: 6});
-		                        }else{
-		                            layer.msg("删除失败", {icon: 5});
-		                        }
-		                    }
-		                });
-		            });
-		        } else if(obj.event === 'detail'){//编辑 修改
-		          // location.href="staffupdate.html?d="+ encodeURI(JSON.stringify(data));
-		           	layer.msg(JSON.stringify(data));
-		        }
-		});
-	});
+<div class="layui-container">
+	<table id="tbdata" lay-filter="tbop"></table>
+	<script type="text/html" id="barop">
+		<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="detail">详情</a>
+		<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+
+	</script>
+</div>
+<script src="media/layui/layui.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#tbdata'
+            ,url: 'studentpage.do' //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'no', title: '学号', sort: true, fixed: 'left'}
+                ,{field: 'name', title: '学员名称',sort: true}
+                ,{field: 'gname', title: '所在班级',sort: true}
+                ,{field: 'sex', title: '性别',sort: true}
+                ,{field: 'phone', title: '手机号',sort: true}
+                ,{field: 'email', title: '邮箱',sort: true}
+                ,{field: 'school', title: '毕业学校',sort: true}
+                ,{field: 'education', title: '学历',sort: true}
+                ,{field: 'birthday', title: '出生日期',sort: true}
+                ,{field: 'createdate', title: '入学日期',sort: true}
+                ,{field:'right', title: '操作',toolbar:"#barop"}
+            ]]
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                ,groups: 1 //只显示 1 个连续页码
+                ,first: true //是否显示首页
+                ,last: false //是否显示尾页
+                ,limit:5
+                ,limits:[5,10,15]
+            }
+        });
+        //监听工具条
+        table.on('tool(tbop)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('是否确认删除学员?', function(index){
+                    $.ajax({
+                        url: "studentdelete.do",
+                        type: "POST",
+                        data:"no="+data.no,
+                        success: function(data){
+                            if(data.code==1){
+                                obj.del();//删除表格中的对应行数据
+                                table.reload("tbdata");
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+                    });
+                });
+            } else if(obj.event === 'detail'){//编辑 修改
+				/*location.href="studentadd.html?d="+ encodeURI(JSON.stringify(data));*/
+
+                var student = JSON.stringify(data);
+                var student1 = JSON.parse(student);
+				/*alert(student1.no);*/
+				/*alert(JSON.parse(JSON.stringify(data)));*/
+				/*alert(student1.no);*/
+                loadStudents(student1);
+				/*layer.msg(JSON.stringify(data));*/
+				/*var obj = eval(student);*/
+				/*alert(student);*/
+
+
+
+
+
+            }
+        });
+    });
+
+    function loadStudents(obj){
+
+
+        $("#dv1").empty();
+		/*$("#dv1").html("");*/
+
+
+
+        $("#dv1").append("  <input  name='no' value='学号:  "+ obj.no +"' readonly class='layui-input'>");
+
+
+        $("#dv1").append("<input  name='name' value='学员名称:  "+ obj.name +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='gname' value='所在班级:  "+ obj.gname +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='sex' value='性别:  "+ obj.sex +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='phone' value='手机号:  "+ obj.phone +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='email' value='邮箱:  "+ obj.email +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='school' value='毕业学校:  "+ obj.school +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='name' value='学历:  "+ obj.education +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='no' value='出生日期:  "+ obj.birthday +"' readonly class='layui-input'>");
+        $("#dv1").append("<input  name='name' value='入学日期:  "+ obj.createdate +"' readonly class='layui-input'>");
+
+        /!*form1.render();*!/
+        layer.open({
+            area: ['500px', '300px'],
+            title: '学生信息',
+            type: 1,
+            content:  $('#dvlay'), //这里content是一个普通的String
+            btn: ['新增', '取消'],
+            yes: function(index, layero){
+				/*$.ajax({
+				 url: "userroleedit.do",
+				 data: $("#fm1").serialize(),
+				 success: function (obj) {
+				 if (obj.code == 1000) {
+				 layer.msg("编辑权限成功");
+				 searchData();
+				 } else {
+				 layer.msg("编辑权限失败");
+				 }
+				 }
+				 })*/
+                location.href="studentadd.html?d="+ encodeURI(JSON.stringify(obj));
+
+                layer.close(index);
+            },cancel: function(){
+            }
+        })
+
+    }
+
+
 
 </script>
 </body>
+
+<div style="display: none;margin-top: 10px;width: 480px" id="dvlay">
+	<form id="fm1" class="layui-form layui-form-pane" >
+		<!--<div class="layui-form-item" pane >
+			<label class="layui-form-label">工号：</label>
+			<div class="layui-input-inline">
+				<input id="uid" name="id" readonly class="layui-input">
+			</div>
+		</div>-->
+		<div class="layui-form-item" id="dv1" pane>
+			<!--<label class="layui-form-label" >角色：</label>
+			<div class="layui-input-inline" >
+
+			</div>-->
+		</div>
+	</form>
+</div>
 </html>

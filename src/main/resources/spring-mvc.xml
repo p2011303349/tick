@@ -77,11 +77,11 @@
         <property name="exceptionMappings">
             <props>
                 <!--登录异常，跳转到login.jsp-->
-                <prop key="org.apache.shiro.authz.UnauthenticatedException">
+              <!--  <prop key="org.apache.shiro.authz.UnauthenticatedException">
                     login
-                </prop>
+                </prop>-->
                 <!-- 授权异常，跳转到unauthorized.jsp -->
-                <prop key="org.apache.shiro.authz.UnauthorizedException">unauthorized1</prop>
+             <!--   <prop key="org.apache.shiro.authz.UnauthorizedException">unauthorized1</prop>-->
             </props>
         </property>
     </bean>

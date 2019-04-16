@@ -12,19 +12,19 @@
 </head>
 <body>
 	<div class="layui-container" style="margin-top: 5px">
-		<form class="layui-form layui-form-pane" action="processadd.do" method="post" >
+		<form class="layui-form layui-form-pane" action="processadd.do" method="get" >
 			<div class="layui-form-item">
 
 					<label class="layui-form-label">起始日期</label>
 					<div class="layui-input-block">
-						<input type="text" name="startDate" class="layui-input mydate">
+						<input type="text" name="startdate" class="layui-input mydate">
 					</div>
 
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">结束日期</label>
 				<div class="layui-input-block">
-					<input type="text" name="endDate" class="layui-input mydate">
+					<input type="text" name="enddate" class="layui-input mydate">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -98,9 +98,9 @@
 		});
 		//初始化数据
 		function initData() {
-			$.get("departall.do",null,function(arr){
+			$.get("departall1.do",null,function(arr){
 				for(i=0;i<arr.length;i++){
-					$("#cds").append("<option value='"+arr[i].id+"'>"+arr[i].name+"</option>");
+					$("#cds").append("<option value='"+arr[i].name+"'>"+arr[i].name+"</option>");
 				}
 				form.render("select");
 			});

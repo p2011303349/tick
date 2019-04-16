@@ -15,7 +15,8 @@ public class CommonException {
 	
 	@ExceptionHandler(Exception.class)
 	public JsonBean commonException(Exception e){
-		
+		System.out.println( e.getMessage());
 		return JsonUtils.createJsonBean(0, e.getMessage());
+
 	}
 }

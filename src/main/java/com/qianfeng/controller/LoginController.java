@@ -1,5 +1,6 @@
 package com.qianfeng.controller;
 
+import com.qianfeng.common.CommonInfo;
 import com.qianfeng.common.JsonBean;
 import com.qianfeng.entity.User;
 import com.qianfeng.service.UserService;
@@ -12,19 +13,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class LoginController {
     @Autowired
     private UserService userService;
     @RequestMapping("/login.do")
     @ResponseBody
-    public JsonBean login(String no, String pass){
+    public void login(String no, String pass, HttpServletRequest request, HttpServletResponse response, HttpSession session){
         try {
             userService.login(no, pass);
-            return JsonUtils.createJsonBean(1, null);
+            User user = userService.findByNo(no);
+            session.setAttribute(CommonInfo.LOGIN_USER,user);
+            response.sendRedirect(request.getContextPath() + "/index.html");
         } catch (Exception e) {
             e.printStackTrace();
-            return JsonUtils.createJsonBean(0,e.getMessage());
         }
     }
 }

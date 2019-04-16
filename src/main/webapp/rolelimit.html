@@ -48,7 +48,6 @@
 	<div class="layui-col-md11">
 		<table id="tbdata" lay-filter="tbop"></table>
 		<script type="text/html" id="barop">
-			<a class="layui-btn layui-btn-mini" lay-event="edit">查看权限</a>
 			<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
 			<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
 		</script>
@@ -67,11 +66,26 @@
         tableIns = table.render({
             elem: '#tbdata'
             , url: 'rolepage.do' //数据接口
-            , page: false //关闭分页
+            , page: true //关闭分页
             , cols: [[ //表头
                 {field: 'id', title: '序号', sort: true, fixed: 'left'}
                 , {field: 'name', title: '角色名称'}
                 , {field: 'info', title: '角色备注'}
+                , {
+                    field: 'flag', title: '有/无效', templet: function (obj) {
+                        var r;
+                        switch (obj.flag) {
+                            //有效
+                            case 1:
+                                r = "<span style='color: #1E9FFF'>有效</span>";
+                                break;
+                            case 2:
+                                r = "<span style='color: red'>无效</span>";
+                                break;
+                        }
+                        return r;
+                    }
+                }
                 , {field: 'right', title: '操作', toolbar: "#barop"}
             ]]
         });
@@ -81,13 +95,14 @@
             if (obj.event === 'del') {
                 layer.confirm('是否确认删除角色?', function (index) {
                     $.ajax({
-                        url: "userdel.do",
+                        url: "roledel.do",
                         type: "POST",
                         data: "id=" + data.id,
                         success: function (data) {
-                            if (data.code == 1000) {
+                            if (data.code == 1) {
                                 obj.del();//删除表格中的对应行数据
                                 layer.close(index);
+                                table.reload("tbdata");
                                 layer.msg("删除成功", {icon: 6});
                             } else {
                                 layer.msg("删除失败", {icon: 5});
@@ -96,7 +111,7 @@
                     });
                 });
             } else if (obj.event === 'edit') {//编辑 修改
-                loadRoles(data);
+                loadRoles(obj);
             }
         });
     });
@@ -106,9 +121,7 @@
                 no: $("#no").val()
                 , flag: $("#fg").val()
             }
-            // , page: {
-            //     curr: 1 //重新从第 1 页开始
-            // }
+
         });
     }
     //修改
@@ -128,18 +141,22 @@
     }
 
     function loadRoles(user) {
+        var data =  user.data;
         console.log(user)
-        $("#uid").val(user.id);
-        $.get("roleall.do", null, function (arr) {
+        $("#uid").val(data.id);
+        $.get("auall.do?id="+data.id, null, function (arr) {
             $("#dv1").html("");
-            console.log(user.rids);
-            for (i = 0; i < arr.length; i++) {
-                if(user.rids.indexOf(arr[i].id)>-1){
-                    $("#dv1").append("<input type=\"checkbox\" name=\"rids\" value='" + arr[i].id + "' title=\"" + arr[i].info + "\" checked>");
-                }else{
-                    $("#dv1").append("<input type=\"checkbox\" name=\"rids\" value='" + arr[i].id + "' title=\"" + arr[i].info + "\">");
-                }
+            console.log(arr[1]);
+            for (i = 0; i < arr[1].length; i++) {
+                $("#dv1").append("<input type=\"checkbox\" id=\"checkbox"+arr[1][i].id+"\" name=\"rids\" value='" + arr[1][i].id + "' title=\"" + arr[1][i].title + "\">");
             }
+            $(arr[0]).each(function(){
+                for (i = 0; i < arr[1].length; i++) {
+                    if(this.id == arr[1][i].id){
+                        $("#checkbox"+arr[1][i].id+"").attr('checked', true)
+                    }
+                }
+            })
             form1.render();
             layer.open({
                 area: ['500px', '300px'],

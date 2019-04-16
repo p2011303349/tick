@@ -72,7 +72,7 @@
                 {field: 'id', title: '序号', sort: true, fixed: 'left'}
                 , {field: 'no', title: '工号'}
                 , {field: 'name', title: '姓名', sort: true}
-                , {field: 'role', title: '职位', sort: true}
+                , {field: 'info', title: '职位', sort: true}
                 , {
                     field: 'flag', title: '有/无效', templet: function (obj) {
                         var r;
@@ -101,9 +101,10 @@
                         type: "POST",
                         data: "id=" + data.id,
                         success: function (data) {
-                            if (data.code == 1000) {
+                            if (data.code == 1) {
                                 obj.del();//删除表格中的对应行数据
                                 layer.close(index);
+                                table.reload("tbdata");
                                 layer.msg("删除成功", {icon: 6});
                             } else {
                                 layer.msg("删除失败", {icon: 5});
@@ -133,7 +134,9 @@
             url: "userroleedit.do",
             data: $("#fm1").serialize(),
             success: function (obj) {
-                if (obj.code == 1000) {
+                if (obj.code == 1) {
+                    layer.close(index);
+                    //table.reload("tbdata");
                     layer.msg("编辑权限成功");
                 } else {
                     layer.msg("编辑权限失败");
@@ -145,10 +148,11 @@
 
     function loadRoles(user) {
         $("#uid").val(user.id);
-        $.get("roleall.do", null, function (arr) {
+        $("#uname").val(user.name);
+        $.get("roleall.do?id="+user.id, null, function (arr) {
             $("#dv1").html("");
             for (i = 0; i < arr.length; i++) {
-                if(user.rids.indexOf(arr[i].id)>-1){
+                if(arr[i].flag == 1){
                     $("#dv1").append("<input type=\"checkbox\" name=\"rids\" value='" + arr[i].id + "' title=\"" + arr[i].info + "\" checked>");
                 }else{
                     $("#dv1").append("<input type=\"checkbox\" name=\"rids\" value='" + arr[i].id + "' title=\"" + arr[i].info + "\">");
@@ -166,16 +170,19 @@
                         url: "userroleedit.do",
                         data: $("#fm1").serialize(),
                         success: function (obj) {
-                            if (obj.code == 1000) {
-                                layer.msg("编辑权限成功");
-                                searchData();
+                            if (obj.code == 1) {
+
+                                layer.msg("编辑角色成功");
+                                location.reload();
                             } else {
-                                layer.msg("编辑权限失败");
+                                layer.msg("编辑角色失败");
                             }
                         }
                     })
-                    layer.close(index);
-                },cancel: function(){
+                  layer.close(index);
+
+                },end:function () {
+                   // location.reload();
                 }
             });
         })
@@ -183,11 +190,17 @@
 </script>
 </body>
 <div style="display: none;margin-top: 10px;width: 480px" id="dvlay">
-    <form id="fm1" class="layui-form layui-form-pane" >
+    <form id="fm1" class="layui-form layui-form-pane" onsubmit="return false;">
         <div class="layui-form-item" pane >
             <label class="layui-form-label">工号：</label>
             <div class="layui-input-inline">
                 <input id="uid" name="id" readonly class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" pane >
+            <label class="layui-form-label">名字：</label>
+            <div class="layui-input-inline">
+                <input id="uname" name="name"  class="layui-input">
             </div>
         </div>
         <div class="layui-form-item" pane>

@@ -103,7 +103,11 @@
    
    </aop:config>
 
-
+	<!--文件上传-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"/>
+		<property name="maxUploadSize" value="20971520"/>
+	</bean>
 
 	<!-- 自定义Realm -->
 	<bean id="myRealm" class="com.qianfeng.realm.MyRealm"/>
@@ -126,22 +130,24 @@
 		<!-- 未登陆时，访问需要认证的资源，则跳转到登录页面的配置 -->
 		<property name="loginUrl" value="/login.html"/>
 		<!-- 权限认证失败，则跳转到指定页面 -->
-		<property name="unauthorizedUrl" value="/unauthorized.html"/>
+		<property name="unauthorizedUrl" value="/error.html"/>
 		<!-- Shiro连接约束配置,即过滤链的定义 -->
 		<property name="filterChainDefinitions">
 			<value>
 				<!--  一般设置和认证相关的配置
 				 	和权限相关的一般使用注解
 				 -->
-				/login.jsp = anon
+				/login.html = anon
+				/logout = logout
+
 				/login.do = anon
-				/media/** = anon<!--静态资源加载-->
-				/test1.do = perms["user:list"]
-				/test2.do = perms["aaaa"]
+				/*.do = anon
+				/media/** = anon
 				<!-- 配置退出的操作 -->
-				/logout.do = logout
+
 				<!--  访问其他没有匹配上的资源时，都经过身份认证 -->
-				/** = authc
+				/*.html=anon
+				/*.* = authc
 			</value>
 		</property>
 	</bean>

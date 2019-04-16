@@ -27,14 +27,14 @@
 		  //第一个实例
 		  table.render({
 		    elem: '#tbdata'
-		    ,url: 'processnolist.do' //数据接口
+		    ,url: 'processlist.do' //数据接口
 		    ,page: true //开启分页
 		    ,cols: [[ //表头
 		      {field: 'id', title: '序号', sort: true, fixed: 'left'}
 		      ,{field: 'startname', title: '发起人'}
 		      ,{field: 'type', title: '类型'}
-		      ,{field: 'startDate', title: '起始日期', sort: true}
-		      ,{field: 'endDate', title: '终止日期', sort: true}
+		      ,{field: 'startdate', title: '起始日期', sort: true}
+		      ,{field: 'enddate', title: '终止日期', sort: true}
 		      ,{field: 'days', title: '天数',sort:true}
 		      ,{field: 'pid', title: '流程序号'}
 		      ,{field: 'tid', title: '任务序号'}

@@ -1,6 +1,7 @@
 package com.qianfeng.realm;
 
 import com.qianfeng.dao.UserMapper;
+import com.qianfeng.entity.User;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -31,10 +32,10 @@ public class MyRealm extends AuthorizingRealm {
         // 获取输入的用户名
         String name = (String)token.getPrincipal();
         // 根据用户名从数据库中查询密码
-        String passowrd = userDao.findPwdByName(name);
+        User user = userDao.findByNo(name);
         // 创建认证对象
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(name, passowrd, this.getName());
 
-        return info;
+
+        return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
     }
 }

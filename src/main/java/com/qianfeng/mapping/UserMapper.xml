@@ -107,4 +107,89 @@
   <select id="findPwdByName" parameterType="string" resultType="string">
     select password from t_user where  no =#{uname}
   </select>
+
+
+   <resultMap type="com.qianfeng.vo.VMenuInfo" id="menuMap">
+    <id property="id" column="cid"/>
+    <result property="title" column="ctitle"/>
+    <result property="aurl" column="curl"/>
+    <collection property="menuList" javaType="java.util.ArrayList" ofType="com.qianfeng.vo.VMenuInfo">
+      <id property="id" column="aid"/>
+      <result property="title" column="atitle"/>
+      <result property="aurl" column="aurl"/>
+    </collection>
+  </resultMap>
+
+  <select id="findMenu" parameterType="string" resultMap="menuMap">
+    select distinct a.id aid,a.title atitle,a.aurl ,au.id cid,au.title ctitle,au.aurl curl
+    from t_authority a
+    inner join t_authority au
+    on a.parentId = au.id
+    inner join t_roleauthority ra
+    on ra.aid = au.id
+    inner join t_role r
+    on ra.rid = r.id
+    inner join t_userrole ur
+    on r.id = ur.rid
+    inner join t_user u
+    on ur.uid = u.id
+    where u.no=#{no}
+  </select>
+
+
+  <select id="findByNo" parameterType="string" resultMap="BaseResultMap">
+    select * from t_user where  no =#{uname}
+  </select>
+
+
+
+  <resultMap id="userMap" type="com.qianfeng.vo.VUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="no" jdbcType="VARCHAR" property="no" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="headphoto" jdbcType="VARCHAR" property="headphoto" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+  </resultMap>
+
+  <select id="findUserAll" resultType="map" resultMap="userMap">
+    select u.no,u.password,u.name, u.headphoto,ur.id,ur.flag,r.info from t_user u
+    inner join t_userrole ur
+    on u.id =ur.uid
+    inner join t_role r
+    on ur.rid = r.id
+    <where>
+      <if test='no != null and no != ""'>
+        and u.no = #{no}
+      </if>
+      <if test="flag != null">
+        and ur.flag = #{flag}
+      </if>
+    </where>
+  </select>
+
+  <update id="delById" parameterType="map">
+     update t_userrole set flag = #{flag} where id = #{id}
+  </update>
+
+  <select id="findrole" parameterType="int" resultMap="userMap">
+      select u.no,u.password,u.name, u.headphoto,ur.id,ur.flag,r.info from t_user u
+    inner join t_userrole ur
+    on u.id =ur.uid
+    inner join t_role r
+    on ur.rid = r.id where ur.id = #{id}
+  </select>
+
+  <update id="updateStatus" parameterType="map">
+    update t_userrole set flag = #{flag} where id = #{id}
+  </update>
+
+  <update id="updateName" parameterType="map">
+    update t_user set name = #{name} where id = #{id}
+  </update>
+<select id="findUserId" parameterType="int" resultType="int">
+  select uid from t_userrole where id = #{id}
+</select>
+
 </mapper>

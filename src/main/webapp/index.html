@@ -53,7 +53,7 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <img src="media/images/qf_logo.png" class="layui-nav-img">
-                    Feri
+
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:showTab(1001,'user.html','我的信息');">我的信息</a></dd>
@@ -61,7 +61,7 @@
                     <dd><a href="javascript:showTab(1002,'user.html','修改密码');">修改密码</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="userloginout.do">注销</a></li>
+            <li class="layui-nav-item"><a href="logout">注销</a></li>
         </ul>
     </div>
 
@@ -76,10 +76,13 @@
     </div>
     <div class="layui-body" id="container" >
         <!-- 内容主体区域 -->
+        <iframe name="myframe" width="100%" height="100%">
         <div class="layui-tab" lay-filter="demo" style="width: 100%;height: 90%">
             <ul class="layui-tab-title"></ul>
             <div class="layui-tab-content" style="width: 99%;height: 98%"></div>
+
         </div>
+        </iframe>
     </div>
 
     <div class="layui-footer">
@@ -95,20 +98,21 @@
 <script src="media/layui/layui.js"></script>
 <script>
     //JavaScript代码区域
-    var element;
+   /* var element;
     layui.config({
         base: 'media/layui/lay/modules/'
     }).use(['element','app'], function(){
         element = layui.element;
-        $.get("/usermenu.do",null,function (arr) {
+        $.get("usermenu.do",null,function (arr) {
+            var infos = arr.info;
             var s;
-            for(i=0;i<arr.length;i++){
-                var parent=arr[i];
-                s+="<li class='layui-nav-item '> <a href='javascript:;' id='"+parent.id+"'><i class=\"fa "+parent.icon+"\"></i>&nbsp;"+parent.title+"</a>";
-                if(parent.childs.length>0){
+            for(i=0;i<infos.size;i++){
+
+                s+="<li class='layui-nav-item '> <a href='javascript:;' id='"+this.id+"'></i>&nbsp;"+this.title+"</a>";
+                if(this.menuList.size>0){
                     s+="<dl class='layui-nav-child'>";
-                    for(j=0;j<parent.childs.length;j++){
-                        var child=parent.childs[j];
+                    for(j=0;j<this.menuList.size;j++){
+                        var child=this.menuList.get(j);
                         s+="<dd><a href='javascript:;' id='"+child.id+"' onclick='showTab("+child.id+",\""+child.aurl+"\",\""+child.title+"\")'>&nbsp;&nbsp;&nbsp;&nbsp;"+child.title+"</a></dd>";
                     }
                     s+="</dl>";
@@ -119,7 +123,7 @@
             element.render();
         });
         showTab(20000,"main.html","首页");
-    });
+    });*/
     var tid=-1;
     function showTab(id,u,n) {
         if(tid>0){
@@ -136,6 +140,43 @@
     }
 
 </script>
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+        $.ajax({
+            type:"get",
+            url:"usermenu.do",
+            dataType:"json",
+            success:function(data){
+                var infos = data.info;
+                $(infos).each(function(){
+
+                    var html = '<li class="layui-nav-item">';
+                    html += '<a class="" href="#">' + this.title  + '</a>';
+                    html += '<dl class="layui-nav-child">';
+                    var cmenu = this.menuList;
+                    $(cmenu).each(function(){
+                        html += '<dd><a href="' + this.aurl + '" target="myframe">' + this.title + '</a></dd>';
+                    })
+
+                    html += '</dl>';
+                    html += '</li>';
+
+                    $("#lm").append($(html));
+                })
+                // 动态设置内容后，需要调用如下方法，重新加载数据
+                //element.render();
+               element.init();
+            }
+        })
+
+
+    });
+</script>
+
 </body>
 
 </html>

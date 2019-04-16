@@ -180,7 +180,18 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.0.1.Final</version>
         </dependency>
+
+
+        <!-- 分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.0.3</version>
+        </dependency>
+
+
     </dependencies>
+
 
 
     <build>
