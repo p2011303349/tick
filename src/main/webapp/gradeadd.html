@@ -76,7 +76,7 @@
     function initData() {
         $.get("courseall.do",null,function(arr){
             for(i=0;i<arr.length;i++){
-                $("#cds").append("<option value='"+arr[i].id+"'>"+arr[i].name+"</option>");
+                $("#cds").append("<option value='"+arr[i].cid+"' >"+arr[i].name+"</option>");
             }
             form.render("select");
         })

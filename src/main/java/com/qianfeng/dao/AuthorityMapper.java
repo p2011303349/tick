@@ -11,7 +11,7 @@ public interface AuthorityMapper {
 
     int insert(Authority record);
 
-    int insertSelective(Authority record);
+    public int insertSelective(Authority record);
 
     Authority selectByPrimaryKey(Integer id);
 
@@ -24,6 +24,10 @@ public interface AuthorityMapper {
     public List<Authority> findAu(Integer id);
 
     public List<Authority> findAll();
+
+    public void deleteByAid(int id);
+
+    public void deleteByAidAnd(int id);
 
 
 

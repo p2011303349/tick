@@ -1,5 +1,6 @@
 package com.qianfeng.service;
 
+import com.qianfeng.entity.SysCourse;
 import com.qianfeng.entity.SysGrade;
 import com.qianfeng.vo.VGrade;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
@@ -16,4 +17,8 @@ public interface GradeService {
     public void deleteGrade(Integer id);
 
     public void updateGrade(SysGrade sysGrade);
+
+    public void gradeadd(SysGrade sysGrade);
+
+    public List<SysCourse> courseall();
 }

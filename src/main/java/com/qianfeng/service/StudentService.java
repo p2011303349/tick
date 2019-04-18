@@ -18,6 +18,8 @@ public interface StudentService {
     public List<SysGrade> gradeall();
 
     public void studentadd(SysStudent student);
+
+    public void addStudentBatch(List<SysStudent> list);
    /*public void deleteCourse(Integer id);
 
    public void updateCourse(SysCourse sysCourse);*/

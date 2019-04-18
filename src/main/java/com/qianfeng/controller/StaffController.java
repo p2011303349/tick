@@ -1,6 +1,9 @@
 package com.qianfeng.controller;
 
 import com.alibaba.druid.util.StringUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.qianfeng.common.JsonBean;
@@ -10,6 +13,7 @@ import com.qianfeng.entity.SysGrade;
 import com.qianfeng.entity.SysStaff;
 import com.qianfeng.service.CourseService;
 import com.qianfeng.service.StaffService;
+import com.qianfeng.utils.ImportExcel;
 import com.qianfeng.utils.JsonUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +41,11 @@ import java.util.*;
 public class StaffController {
     @Autowired
     private StaffService staffService;
+
+
     @RequestMapping("/staffpage.do")
+
+
 
     public Map<String, Object> staffList(int page){
         PageHelper.startPage(page, 5);
@@ -81,7 +89,9 @@ public class StaffController {
     }
     @RequestMapping(value = "/photoupload.do", method = RequestMethod.POST)
 
-    public String uploadHead(@RequestParam("file") MultipartFile file, HttpSession session) {
+    public Map<String, Object> uploadHead(@RequestParam("file") MultipartFile file, HttpSession session) {
+        Map<String, Object> map = new HashMap<>();
+
         try {
             if (file != null) {
                 //获取文件名
@@ -96,36 +106,85 @@ public class StaffController {
                 if(list.contains(extName.toLowerCase())){
 
                     //01获取服务器项目部署的路径，并在根目录下创建 myphoto 目录
-                    //String realPath = session.getServletContext().getRealPath("myphoto");
+                    String realPath = session.getServletContext().getRealPath("photos");
                     //02也可以直接定义文件路径
-                    String realPath = "D:\\space\\SSMBase\\src\\main\\webapp\\img";
+                    /*String realPath = "D:\\space\\SSMBase\\src\\main\\webapp\\img";*/
 
                     String photoFileName = new Date().getTime()+extName;
-                    String descPath = realPath + "\\" + photoFileName;
-                    System.out.println(descPath);
+                    String descPath = "photos\\" + photoFileName;
+
+                    /*System.out.println(descPath);*/
                     file.transferTo(new File(realPath,photoFileName));
-                    return descPath;//成功
+                    map.put("code", 0); // 0 表示成功
+                    map.put("msg", descPath);
+
+                    System.out.println(map.get("msg"));
+
+
+                    return map;//成功
                 }else {
-                    return "-1";//文件类型不正确
+                    map.put("code", 1);
+                    return map;//文件类型不正确
                 }
             }else {
-                return "0";//上传文件为空
+                map.put("code", 1);
+                return map;//上传文件为空
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "-1";//上传异常
+            map.put("code", 1);
+            return map;//上传异常
         }
     }
 
     @RequestMapping("/staffupdate.do")
     public void updateStaff(SysStaff sysStaff,HttpServletRequest request, HttpServletResponse response){
         try {
+
             staffService.updateStaff(sysStaff);
 
             response.sendRedirect(request.getContextPath() + "/stafflist.html");
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping("/staffadd.do")
+    public void addStaff(SysStaff sysStaff,HttpServletRequest request, HttpServletResponse response){
+        try {
+
+            staffService.addStaff(sysStaff);
+
+            response.sendRedirect(request.getContextPath() + "/stafflist.html");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("/importBatch.do")
+    @ResponseBody
+    public JsonBean importExcel(@RequestParam MultipartFile excelfile,HttpServletResponse response,HttpServletRequest request) {
+        try {
+            String filename = excelfile.getOriginalFilename();
+            //获取上传文件的输入流
+            InputStream inputStream = excelfile.getInputStream();
+            List<Map<String, Object>> scorceList =	ImportExcel.readExcel(filename, inputStream);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String infos = objectMapper.writeValueAsString(scorceList);
+
+            List<SysStaff> list = objectMapper.readValue(infos, new TypeReference<List<SysStaff>>() {});
+
+            staffService.addUserBatch(list);
+            response.sendRedirect(request.getContextPath() + "/index.html");
+
+            return JsonUtils.createJsonBean(1, null);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return JsonUtils.createJsonBean(0, e.getMessage());
+        }
+
     }
 
 

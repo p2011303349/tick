@@ -44,4 +44,23 @@ public class AuthorityServiceImpl implements AuthorityService{
         ll.add(all);
         return ll;
     }
+
+    @Override
+    public void deleteByAid(int id) {
+        authorityDao.deleteByAidAnd(id);
+        authorityDao.deleteByAid(id);
+
+    }
+
+    @Override
+    public List findAuYIJi() {
+        List<Authority> all = authorityDao.findAll();
+        return all;
+    }
+
+    @Override
+    public int insertSelective(Authority record) {
+        authorityDao.insertSelective(record);
+        return 0;
+    }
 }

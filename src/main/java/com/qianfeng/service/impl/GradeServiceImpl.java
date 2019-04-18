@@ -2,6 +2,7 @@ package com.qianfeng.service.impl;
 
 import com.qianfeng.dao.SysCourseMapper;
 import com.qianfeng.dao.SysGradeMapper;
+import com.qianfeng.entity.SysCourse;
 import com.qianfeng.entity.SysGrade;
 import com.qianfeng.service.GradeService;
 import com.qianfeng.vo.VGrade;
@@ -33,5 +34,15 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public void updateGrade(SysGrade sysGrade) {
         gradeDao.updateGrade(sysGrade);
+    }
+
+    @Override
+    public void gradeadd(SysGrade sysGrade) {
+        gradeDao.gradeadd(sysGrade);
+    }
+
+    @Override
+    public List<SysCourse> courseall() {
+        return gradeDao.courseall();
     }
 }

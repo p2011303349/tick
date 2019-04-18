@@ -12,4 +12,6 @@ public interface CourseService {
    public void deleteCourse(Integer id);
 
    public void updateCourse(SysCourse sysCourse);
+
+    public void courseadd(SysCourse sysCourse);
 }

@@ -32,4 +32,12 @@ public class RoleController {
     }
 
 
+    @RequestMapping("/roleauedit.do")
+    @ResponseBody
+    public JsonBean addRoleAu(int id,int[] rids){
+        roleService.updateAu(id,rids);
+        return JsonUtils.createJsonBean(1,null);
+    }
+
+
 }

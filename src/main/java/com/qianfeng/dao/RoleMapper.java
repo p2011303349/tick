@@ -25,4 +25,15 @@ public interface RoleMapper {
 
     public void delByRId(@Param("flag")int flag,@Param("id")int id);
 
+    public void  deleteAu (int rid);
+
+    public int[] findAu(int aid);
+
+    public void  addAu(@Param("rid")int rid,@Param("aid")int aid,@Param("array")int[] array);
+
+    public List<Role>  findRole1(@Param("no") String no);
+
+    public List <Role> findMyRole(int id);
+
+
 }

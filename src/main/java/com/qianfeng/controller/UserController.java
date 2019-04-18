@@ -48,7 +48,7 @@ public class UserController {
         if (rids == null){
             k = 2;
         }else {
-           k = 1;
+            k = 1;
         }
         userService.updateStatus(id,k,name);
         return JsonUtils.createJsonBean(1,null);

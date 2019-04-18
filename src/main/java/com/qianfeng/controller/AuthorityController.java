@@ -32,4 +32,25 @@ public class AuthorityController {
         List list = authorityService.findAu(id);
         return list;
     }
+    @RequestMapping("/audelete.do")
+    @ResponseBody
+    public void deleteByAid(int id){
+        authorityService.deleteByAid(id);
+    }
+
+
+    @RequestMapping("/authorityroot.do")
+    @ResponseBody
+    public List findAuYiJi(){
+        List list = authorityService.findAuYIJi();
+        return list;
+    }
+
+
+    @RequestMapping("/authorityadd.do")
+    @ResponseBody
+    public JsonBean addAuthor(Authority authority){
+        authorityService.insertSelective(authority);
+        return JsonUtils.createJsonBean(1,null);
+    }
 }

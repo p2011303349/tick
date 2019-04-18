@@ -12,7 +12,7 @@
     id, info, name, parentId
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_role
     where id = #{id,jdbcType=INTEGER}
@@ -102,6 +102,37 @@
   <update id="delByRId" parameterType="map">
     update t_userrole set flag = #{flag} where rid = #{id}
   </update>
+
+  <delete id="deleteAu" parameterType="int">
+    DELETE  from t_roleauthority  where rid = #{id}
+  </delete>
+
+  <select id="findAu" parameterType="int" resultType="int">
+    SELECT a.id from t_authority au inner join t_authority a on au.id = a.parentId where au.id = #{id}
+  </select>
+  <insert id="addAu" parameterType="map">
+    insert into t_roleauthority (rid,aid) VALUE(#{rid},#{aid}),
+    <foreach collection="array" item="item" separator=",">
+      (#{rid},#{item})
+    </foreach>
+  </insert>
+
+  <!-- 获得我的角色信息
+    Role findMyRole(int id);-->
+  <select id="findMyRole" parameterType="int" resultType="com.qianfeng.entity.Role">
+    select r.parentId from t_user u
+    inner join t_userrole ur
+    on u.id = ur.uid
+    inner join t_role r
+    on ur.rid = r.id
+    where u.id = #{id}
+  </select>
+
+
+  <select id="findUserRole" parameterType="string" resultMap="BaseResultMap">
+    select distinct r.* from t_role r inner join  t_userrole ur on r.id = ur.uid where r.id in (  select r.parentId from t_user u inner join t_userrole ur on u.id = ur.uid inner join t_role r on ur.rid = r.id where u.no ='admin') and r.parentId not in (	select r.parentId from t_user u inner join t_userrole ur on u.id = ur.uid inner join t_role r on ur.rid = r.id where u.no ='admin')
+  </select>
+
 
 
 </mapper>

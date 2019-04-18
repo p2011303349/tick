@@ -2,6 +2,7 @@ package com.qianfeng.dao;
 
 import com.qianfeng.entity.Check;
 import com.qianfeng.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,5 +25,8 @@ public interface CheckMapper {
 
     public void del(int id);
 
+    public List<Check> findCheckAll1(String name);
+
+    public void  updateFalg(@Param("id") int id,@Param("flag") int flag);
 
 }

@@ -33,4 +33,9 @@ public class CourseServiceImpl implements CourseService {
     public void updateCourse(SysCourse sysCourse) {
         courseDao.updateCourse(sysCourse);
     }
+
+    @Override
+    public void courseadd(SysCourse sysCourse) {
+        courseDao.courseadd(sysCourse);
+    }
 }

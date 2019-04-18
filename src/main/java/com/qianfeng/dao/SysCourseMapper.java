@@ -22,4 +22,6 @@ public interface SysCourseMapper {
     public void deleteCourse(Integer id);
 
     public void updateCourse(SysCourse sysCourse);
+
+    public void courseadd(SysCourse sysCourse);
 }

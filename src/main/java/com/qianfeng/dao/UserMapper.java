@@ -38,5 +38,5 @@ public interface UserMapper {
 
     public int findUserId(int id);
 
-
+    public  List<User> findLeaders(int id);
 }

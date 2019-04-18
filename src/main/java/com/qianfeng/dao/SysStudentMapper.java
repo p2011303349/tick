@@ -27,5 +27,7 @@ public interface SysStudentMapper {
 
     public void studentadd(SysStudent sysStudent);
 
+    public void addBatch(List<SysStudent> tempList);
+
     /*public void studentadd(Student vStudent);*/
 }

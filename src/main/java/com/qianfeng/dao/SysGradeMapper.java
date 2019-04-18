@@ -1,5 +1,6 @@
 package com.qianfeng.dao;
 
+import com.qianfeng.entity.SysCourse;
 import com.qianfeng.entity.SysGrade;
 import com.qianfeng.vo.VGrade;
 
@@ -25,4 +26,8 @@ public interface SysGradeMapper {
     public void deleteGrade(Integer id);
 
     public void updateGrade(SysGrade sysGrade);
+
+    public void gradeadd(SysGrade sysGrade);
+
+    public List<SysCourse> courseall();
 }

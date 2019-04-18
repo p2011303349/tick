@@ -122,4 +122,13 @@
     type = #{type,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <insert id="courseadd" parameterType="com.qianfeng.entity.SysCourse">
+    insert into t_course (name, flag,
+    week, createdate, type
+    )
+    values ( #{name,jdbcType=VARCHAR}, 1,
+    #{week,jdbcType=INTEGER}, #{createdate,jdbcType=DATE}, #{type,jdbcType=INTEGER}
+    )
+  </insert>
 </mapper>

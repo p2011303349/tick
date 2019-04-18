@@ -6,6 +6,7 @@ import com.qianfeng.entity.Check;
 import com.qianfeng.entity.Role;
 import com.qianfeng.entity.User;
 import com.qianfeng.service.CheckService;
+import com.qianfeng.service.RoleService;
 import com.qianfeng.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,8 @@ import java.util.Map;
 public class CheckController {
     @Autowired
     private CheckService checkService;
+    @Autowired
+    private RoleService roleService;
     @RequestMapping("/processlist.do")
     public Map<String,Object> findUserAll(int page, int limit, HttpSession session){
         User user = (User) session.getAttribute(CommonInfo.LOGIN_USER);
@@ -48,10 +52,10 @@ public class CheckController {
         }
     }
     @RequestMapping("/departall1.do")
-    public List<User> findRole(HttpSession session){
+    public  Collection<User> findRole(HttpSession session){
         User user = (User) session.getAttribute(CommonInfo.LOGIN_USER);
-        List<User> list = checkService.findRanme(user.getNo());
-        return list;
+        Collection<User> role1 = roleService.findRole1(user.getId());
+        return role1;
     }
 
 
@@ -61,8 +65,19 @@ public class CheckController {
         return JsonUtils.createJsonBean(1,null);
     }
 
+    @RequestMapping("/processtodolist.do")
+    public Map<String,Object> findProcess(int page, int limit, HttpSession session){
+        User user = (User) session.getAttribute(CommonInfo.LOGIN_USER);
+        Map<String, Object> map = checkService.findCheckAll1(page,limit,user.getName());
+        return map;
+    }
 
 
+    @RequestMapping("/processupdate.do")
+    public JsonBean updateProcsee(int id,int flag){
+        checkService.updateFalg(id,flag);
+        return JsonUtils.createJsonBean(1,null);
+    }
 
 
 

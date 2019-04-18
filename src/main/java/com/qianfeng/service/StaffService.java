@@ -16,4 +16,7 @@ public interface StaffService {
     public List<SysDepart> departall();
 
     public void updateStaff(SysStaff sysStaff);
+
+    public void addStaff(SysStaff sysStaff);
+    public void addUserBatch(List<SysStaff> list);
 }

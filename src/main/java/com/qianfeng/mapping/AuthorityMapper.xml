@@ -13,7 +13,7 @@
     id, aicon, aurl, parentId, title, type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_authority
     where id = #{id,jdbcType=INTEGER}
@@ -115,4 +115,12 @@
     select distinct au.* from t_authority au inner join t_roleauthority r on au.id = r.aid where au.parentId = 0
   </select>
 
+
+  <delete id="deleteByAid" parameterType="int">
+    DELETE  from t_authority where id = #{id}
+  </delete>
+
+  <delete id="deleteByAidAnd" parameterType="int">
+    DELETE  from t_roleauthority where aid = #{id}
+  </delete>
 </mapper>

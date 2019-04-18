@@ -152,7 +152,7 @@
 
 
   <select id="staffList"  resultType="com.qianfeng.entity.SysStaff">
-    SELECT s.no,s.name,d.name dname,s.sex,s.phone,s.email,s.qq,s.createdate
+    SELECT s.no,s.name,d.name dname,s.sex,s.phone,s.email,s.qq,s.createdate,s.photo
     FROM t_staff s
     INNER JOIN t_depart d
     on s.did = d.id
@@ -182,4 +182,24 @@
     photo = #{photo,jdbcType=VARCHAR}
     where no = #{no,jdbcType=VARCHAR}
   </update>
+
+  <insert id="addStaff" parameterType="com.qianfeng.entity.SysStaff">
+    insert into t_staff (no, name, did,
+    flag, sex, email, qq,
+    phone, createdate, photo
+    )
+    values (#{no,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{did,jdbcType=INTEGER},
+    1, #{sex,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},
+    #{phone,jdbcType=VARCHAR}, #{createdate,jdbcType=DATE}, #{photo,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <insert id="addBatch" parameterType="list">
+    insert into t_staff (<include refid="Base_Column_List" />)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.no},#{item.name},#{item.did},#{item.flag},#{item.sex},#{item.email},#{item.qq},#{item.phone},#{item.createdate},#{item.photo})
+    </foreach>
+
+  </insert>
 </mapper>

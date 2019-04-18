@@ -118,9 +118,9 @@
   <select id="gradeList"  resultType="com.qianfeng.vo.VGrade">
     SELECT g.id,g.name ,c.name cname,count(*) count,g.week,g.location,g.createdate
     FROM t_grade g
-    INNER JOIN t_course c
+    LEFT JOIN t_course c
     on g.cid = c.id
-	INNER JOIN t_student s
+	LEFT JOIN t_student s
 	on g.id = s.gid
 	GROUP BY g.id
 
@@ -141,4 +141,21 @@
 
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <insert id="gradeadd" parameterType="com.qianfeng.entity.SysGrade">
+    insert into t_grade (name, flag,
+    week, createdate, location,
+    cid)
+    values ( #{name,jdbcType=VARCHAR}, 1,
+    #{week,jdbcType=INTEGER}, #{createdate,jdbcType=DATE}, #{location,jdbcType=VARCHAR},
+    #{cid,jdbcType=INTEGER})
+  </insert>
+
+  <select id="courseall"  resultType="com.qianfeng.entity.SysCourse">
+    SELECT g.name,g.id cid
+
+    FROM t_course g
+
+
+  </select>
 </mapper>

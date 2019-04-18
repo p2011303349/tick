@@ -11,6 +11,7 @@ import com.qianfeng.vo.VStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +44,30 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public void studentadd(SysStudent sysStudent) {
         studentDao.studentadd(sysStudent);
+    }
+
+    @Override
+    public void addStudentBatch(List<SysStudent> list) {
+        // TODO Auto-generated method stub
+        // 每100条记录，进行一次批量操作
+        int count = 1;
+        List<SysStudent> tempList = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++){
+
+            tempList.add(list.get(i));
+            if(count % 100 != 0){
+                count++;
+            }else{
+                studentDao.addBatch(tempList);
+                tempList.clear();
+                count = 1;
+            }
+
+        }
+        if(tempList.size() != 0){
+            studentDao.addBatch(tempList);
+        }
+
     }
 
 

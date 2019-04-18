@@ -11,7 +11,7 @@
     id, name, Createtime, flag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_depart
     where id = #{id,jdbcType=INTEGER}
@@ -79,4 +79,60 @@
       flag = #{flag,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+
+  <resultMap id="ResultMap" type="com.qianfeng.vo.VSysDepart">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="Createtime" jdbcType="DATE" property="createtime" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+  </resultMap>
+
+  <select id="selectDeptAll" resultMap="ResultMap">
+    select distinct d.* ,(SELECT count(*) from t_staff s where s.did = d.id) as count from t_depart d left
+    join t_staff s on d.id = s.did
+  </select>
+
+  <delete id="deleteDeptStff" parameterType="int">
+    delete from t_staff where did = #{id};
+  </delete>
+
+  <delete id="deleteDept" parameterType="int">
+    delete from t_depart where id = #{id};
+  </delete>
+
+  <insert id="insertdept" parameterType="com.qianfeng.entity.SysDepart">
+    insert into t_depart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="createtime != null">
+        Createtime,
+      </if>
+
+      flag
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=DATE},
+      </if>
+
+      1
+
+    </trim>
+  </insert>
+
 </mapper>

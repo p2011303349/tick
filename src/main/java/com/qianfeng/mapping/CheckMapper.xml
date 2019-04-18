@@ -18,7 +18,7 @@
     id, info, type, startname, startno, startdate, enddate, days, pid, flag, rname
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_check
     where id = #{id,jdbcType=INTEGER}
@@ -164,7 +164,7 @@
     where startno = #{name}
   </select>
 
-<select id="findRanme" parameterType="string" resultType="com.qianfeng.entity.User">
+  <select id="findRanme" parameterType="string" resultType="com.qianfeng.entity.User">
   select u.* from t_user u
   inner join t_userrole ur
   on u.id = ur.uid
@@ -173,5 +173,16 @@
 
   <update id="del" parameterType="int">
     UPDATE  t_check set flag = 4 where id =#{id}
+  </update>
+
+  <select id="findCheckAll1" parameterType="string" resultType="com.qianfeng.entity.Check">
+    select
+    <include refid="Base_Column_List" />
+    from t_check
+    where rname = #{name}
+  </select>
+
+  <update id="updateFalg" parameterType="map">
+    UPDATE  t_check set flag = #{flag} where id =#{id}
   </update>
 </mapper>

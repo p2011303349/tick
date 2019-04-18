@@ -1,5 +1,7 @@
 package com.qianfeng.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class SysGrade {
@@ -8,6 +10,18 @@ public class SysGrade {
 
     private String name;
     private String pname;
+
+
+
+    private Integer flag;
+
+    private Integer week;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date createdate;
+
+    private String location;
+
+    private Integer cid;
 
     public Integer getPid() {
         return pid;
@@ -24,16 +38,6 @@ public class SysGrade {
     public void setPname(String pname) {
         this.pname = pname;
     }
-
-    private Integer flag;
-
-    private Integer week;
-
-    private Date createdate;
-
-    private String location;
-
-    private Integer cid;
 
     public Integer getId() {
         return id;

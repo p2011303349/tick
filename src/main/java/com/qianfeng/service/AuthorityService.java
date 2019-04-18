@@ -12,4 +12,10 @@ public interface AuthorityService {
     public Map<String, Object> findAuthorityAll(int page, int limit);
 
     public List findAu(int id);
+
+    public void deleteByAid(int id);
+
+    public List findAuYIJi();
+
+    public int insertSelective(Authority record);
 }

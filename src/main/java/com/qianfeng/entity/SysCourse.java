@@ -1,5 +1,7 @@
 package com.qianfeng.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class SysCourse {
@@ -10,10 +12,20 @@ public class SysCourse {
     private Integer flag;
 
     private Integer week;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date createdate;
 
     private Integer type;
+
+    private  Integer cid;
+
+    public Integer getCid() {
+        return cid;
+    }
+
+    public void setCid(Integer cid) {
+        this.cid = cid;
+    }
 
     public Integer getId() {
         return id;

@@ -13,6 +13,7 @@
 <body>
 	<div class="layui-container">
 		<table id="tbdata" lay-filter="tbop"></table>
+
 		<script type="text/html" id="barop">
     		<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
     		<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
@@ -38,6 +39,7 @@
 		      ,{field: 'qq', title: 'qq号'}
 		      ,{field: 'email', title: '邮箱'}
 		      ,{field: 'createdate', title: '入职日期'}
+		      , {field: 'photo', title: '照片', sort: true}
 		      ,{field:'right', title: '操作',toolbar:"#barop"}
 		    ]]
 		  });
@@ -51,7 +53,7 @@
 		                    type: "POST",
 		                    data:"no="+data.no,
 		                    success: function(data){
-		                        if(data.code==1000){
+		                        if(data.code==1){
 		                            obj.del();//删除表格中的对应行数据
 		                            layer.close(index);
 		                            layer.msg("删除成功", {icon: 6});

@@ -243,4 +243,19 @@
     #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{introno,jdbcType=VARCHAR},
     #{createdate,jdbcType=DATE})
   </insert>
+
+
+  <!-- insert into t() values(),(),() -->
+  <insert id="addBatch" parameterType="list">
+    insert into t_student(no,name, sex,
+    birthday, cardno, school,
+    education, gid,
+    email, qq, phone, introno,
+    createdate)
+    values
+    <foreach collection="list" item="item" separator="," >
+      (#{item.no},#{item.name},#{item.sex},#{item.birthday},#{item.cardno},#{item.school},#{item.education},#{item.gid},#{item.email},#{item.qq},#{item.phone},#{item.introno},#{item.createdate})
+    </foreach>
+
+  </insert>
 </mapper>

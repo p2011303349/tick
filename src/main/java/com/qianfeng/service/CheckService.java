@@ -2,6 +2,7 @@ package com.qianfeng.service;
 
 import com.qianfeng.entity.Check;
 import com.qianfeng.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -17,4 +18,8 @@ public interface CheckService {
     public List<User> findRanme(String name);
 
     public void del(int id);
+
+    public Map<String,Object> findCheckAll1(int page,int limit,String name);
+
+    public void  updateFalg(int id,int flag);
 }

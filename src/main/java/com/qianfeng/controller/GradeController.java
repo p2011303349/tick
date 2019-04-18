@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,5 +69,31 @@ public class GradeController {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping("/courseall.do")
+
+    public List<SysCourse> courseall(){
+
+
+
+
+        List<SysCourse> list =  gradeService.courseall();
+            /*response.sendRedirect(request.getContextPath() + "/index.html");*/
+        return list;
+
+    }
+
+    @RequestMapping("/gradeadd.do")
+
+    public JsonBean gradeadd(SysGrade sysGrade, HttpServletRequest request, HttpServletResponse response){
+
+        try {
+            gradeService.gradeadd(sysGrade);
+            response.sendRedirect(request.getContextPath() + "/gradelist.html");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return JsonUtils.createJsonBean(1, null);
     }
 }

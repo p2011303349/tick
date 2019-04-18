@@ -13,7 +13,7 @@
     id, no, password, name, flag, headphoto
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_user
     where id = #{id,jdbcType=INTEGER}
@@ -109,7 +109,7 @@
   </select>
 
 
-   <resultMap type="com.qianfeng.vo.VMenuInfo" id="menuMap">
+  <resultMap type="com.qianfeng.vo.VMenuInfo" id="menuMap">
     <id property="id" column="cid"/>
     <result property="title" column="ctitle"/>
     <result property="aurl" column="curl"/>
@@ -188,8 +188,19 @@
   <update id="updateName" parameterType="map">
     update t_user set name = #{name} where id = #{id}
   </update>
-<select id="findUserId" parameterType="int" resultType="int">
+  <select id="findUserId" parameterType="int" resultType="int">
   select uid from t_userrole where id = #{id}
 </select>
+
+  <!--查询上级领导-->
+  <select id="findLeaders" parameterType="int" resultType="com.qianfeng.entity.User">
+    select u.name, u.id from t_user u
+    inner join t_userrole ur
+    on u.id = ur.uid
+    inner join t_role r
+    on ur.rid = r.id
+    where r.id = #{id}
+  </select>
+
 
 </mapper>

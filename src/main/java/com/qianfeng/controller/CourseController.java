@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.qianfeng.common.JsonBean;
 import com.qianfeng.dao.SysCourseMapper;
 import com.qianfeng.entity.SysCourse;
+import com.qianfeng.entity.SysStudent;
 import com.qianfeng.service.CourseService;
 import com.qianfeng.service.UserService;
 import com.qianfeng.utils.JsonUtils;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,19 @@ public class CourseController {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping("/courseadd.do")
+
+    public JsonBean courseadd(SysCourse sysCourse, HttpServletRequest request, HttpServletResponse response){
+
+        try {
+            courseService.courseadd(sysCourse);
+            response.sendRedirect(request.getContextPath() + "/courselist.html");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return JsonUtils.createJsonBean(1, null);
     }
 
 
